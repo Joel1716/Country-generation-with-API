@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- ICONS -->
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
+      rel="stylesheet"
+    />
+    <!-- STYLESHEET -->
+    <link rel="stylesheet" href="style.css" />
+    <title>REST API Project</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h2>Where in the world?</h2>
+        <div class="background-mode">
+          <ion-icon class="moon-icon" name="moon"></ion-icon>
+          <p>Dark Mode</p>
+        </div>
+      </header>
+      <main>
+        <div class="country-search-container">
+          <div class="input-container">
+            <input
+              class="country-input-search"
+              type="text"
+              placeholder="Search for a country..."
+            />
+            <ion-icon name="search-outline" class="search-icon"></ion-icon>
+          </div>
+          <select name="" id="">
+            <option value="">Filter by Region</option>
+            <option value="Africa">Africa</option>
+            <option value="Americas">America</option>
+            <option value="Asia">Asia</option>
+            <option value="Europe">Europe</option>
+            <option value="Oceania">Oceania</option>
+            <option value="Antarctic Ocean">Antarctic Ocean</option>
+            <option value="Antarctic">Antarctic</option>
+          </select>
+        </div>
+        <div class="all-countries"></div>
+      </main>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
