@@ -143,3 +143,11 @@ function countryExtraInfo() {
   });
 }
 getCountryData();
+function backgroundMode() {
+  const backgroundMode = document.querySelector(".background-mode");
+  const bodyEl = document.querySelector("body");
+  backgroundMode.addEventListener("click", () => {
+    bodyEl.classList.toggle("light");
+  });
+}
+backgroundMode();
