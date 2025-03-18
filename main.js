@@ -1,8 +1,17 @@
 let countryData = "";
 async function getCountryData() {
-  const response = await fetch("data.json");
-  countryData = await response.json();
-  //   console.log(countryData);
+  // GETTING THE DATA FROM THE RESTfuL API
+  try {
+    const response = await fetch(
+      "https://restcountries.com/v3.1/all?fields=name,flags,region,capital,population,tld,subregion,languages,currencies,borders"
+    );
+    countryData = await response.json();
+  } catch {
+    alert(
+      "Currently going through some problems with our data. Check back later"
+    );
+  }
+  // DEFAULT FILTER FOR ALL THE COUNTRIES TO GENERATE THE HTML
   let filteredData = countryData;
   generateCountryHTML(filteredData);
   // Check what regions actually exist in your data
@@ -12,7 +21,6 @@ async function getCountryData() {
   countryExtraInfo();
   filterByRegions(countryData);
   filterBySearch(countryData);
-  console.log(availableRegions);
 }
 function filterByRegions(countryData) {
   const selectEl = document.querySelector("select");
@@ -40,10 +48,6 @@ function filterByRegions(countryData) {
       filteredData = countryData.filter(
         (country) => country.region === selectedRegion
       );
-    } else if (selectedRegion === "Antarctic Ocean") {
-      filteredData = countryData.filter(
-        (country) => country.region === selectedRegion
-      );
     } else if (selectedRegion === "Antarctic") {
       filteredData = countryData.filter(
         (country) => country.region === selectedRegion
@@ -59,8 +63,9 @@ function filterBySearch(countryData) {
     const searchTerm = searchInput.value.toLowerCase().trim();
     const filteredData = countryData.filter(
       (country) =>
-        country.name.toLowerCase().includes(searchTerm) ||
-        (country.capital && country.capital.toLowerCase().includes(searchTerm))
+        country.name.common.toLowerCase().includes(searchTerm) ||
+        (country.capital[0] &&
+          country.capital[0].toLowerCase().includes(searchTerm))
     );
     generateCountryHTML(filteredData);
     countryExtraInfo();
@@ -69,16 +74,17 @@ function filterBySearch(countryData) {
 function generateCountryHTML(filteredData) {
   const allCountries = document.querySelector(".all-countries");
   const countries = filteredData.map((country) => {
-    return ` <div class="each-country" data-name= "${country.name}">
+    return ` <div class="each-country" data-name= "${country.name.common}">
         <img src="${country.flags.svg}" alt="" />
        <div class="country-data">
-          <h2 class="country-name">${country.name}</h2>
+          <h2 class="country-name">${country.name.common}</h2>
           <p>Population: <span class="data">${country.population}</span></p>
           <p>Region: <span class="data">${country.region}</span></p>
           <p>Capital: <span class="data">${country.capital}</span></p>
        </div>
        </div>`;
   });
+  // COMBINING ALL THE DATA IN THE ARRAY
   allCountries.innerHTML = countries.join("");
   return countries.join("");
 }
@@ -89,22 +95,59 @@ function countryExtraInfo() {
   extraCountry.forEach((country) => {
     country.addEventListener("click", () => {
       const countryName = country.dataset.name;
+      // USING NORMALISATION TO FILTER OUT THE DATA USING THEIR NAMES
       const filterRequiredCountry = countryData.filter(
-        (country) => country.name === countryName
+        (country) => country.name.common === countryName
       );
-      let countries = "";
+      let currencies = "";
       let languages = "";
-      let topLevelDomain = "";
-      countries = filterRequiredCountry[0].currencies.map((country) => {
-        return `<span class="data">${country.name}</span>`;
+      let tld = "";
+      let capital = "";
+      let nativeName = "N/A";
+      let subregion = "";
+      let borders = "";
+      // FOR DATA THAT HAVE INCONSISTENT VALUES
+      const processedData = filterRequiredCountry.map((country) => {
+        // HANDLING BORDERS(can be an array or undefined)
+        if (country.borders.length > 0) {
+          country.borders.forEach((border) => {
+            borders += `<button>${border}</button>`;
+          });
+        } else {
+          return "";
+        }
+
+        // Handle capital (can be an array or undefined)
+        capital = country.capital ? country.capital.join(", ") : "N/A";
+
+        // Handle top-level domain (can be an array or undefined)
+        tld = country.tld ? country.tld.join(", ") : "N/A";
+
+        // Handle languages (can be an object with different keys)
+        languages = country.languages
+          ? Object.values(country.languages)[0]
+          : "N/A";
+
+        // Handle currencies (can be an object with different keys). Maps KEY and VALUES into an array and uses array destructing to assign them to a variable
+        currencies = country.currencies
+          ? Object.entries(country.currencies)
+              .map(([_code, currency]) => `${currency.name}`)
+              .join(", ")
+          : "N/A";
+
+        // Handle nativeName (nested in name.nativeName with language-specific keys)
+        if (country.name.nativeName) {
+          // Get the first available native name
+          const firstNativeNameKey = Object.keys(country.name.nativeName)[0];
+          if (firstNativeNameKey) {
+            nativeName =
+              country.name.nativeName[firstNativeNameKey].official ||
+              country.name.nativeName[firstNativeNameKey].common;
+          }
+        }
+        // COUNTRIES THAT MAY NOT HAVE A SUB-REGION
+        subregion = country.subregion ? country.subregion : "N/A";
       });
-      languages = filterRequiredCountry[0].languages.map((language) => {
-        return `<span class="data">${language.name}</span>`;
-      });
-      topLevelDomain = filterRequiredCountry[0].topLevelDomain.map((domain) => {
-        return `<span class="data">${domain}</span>`;
-      });
-      console.log(filterRequiredCountry);
       mainEl.innerHTML = `
       <div class="countryDataLayout">
         <button class="back-arrow">
@@ -113,22 +156,20 @@ function countryExtraInfo() {
         <div class="eachCountryDataContainer">
           <img src="${filterRequiredCountry[0].flags.svg}" alt="" />
           <div class="eachCountryData">
-            <h2>${filterRequiredCountry[0].name}</h2>
+            <h2>${filterRequiredCountry[0].name.common}</h2>
             <div class="allData">
-              <p>Native Name: <span class="data">${filterRequiredCountry[0].nativeName}</span></p>
+              <p>Native Name: <span class="data">${nativeName}</span></p>
               <p>Population: <span class="data">${filterRequiredCountry[0].population}</span></p>
               <p>Region: <span class="data">${filterRequiredCountry[0].region}</span></p>
-              <p>Sub Region: <span class="data">${filterRequiredCountry[0].subregion}</span></p>
-              <p>Capital: <span class="data">${filterRequiredCountry[0].capital}</span></p>
-              <p>Top Level Domain: ${topLevelDomain}</p>
-              <p>Currencies: ${countries}</p>
+              <p>Sub Region: <span class="data">${subregion}</span></p>
+              <p>Capital: <span class="data">${capital}</span></p>
+              <p>Top Level Domain: ${tld}</p>
+              <p>Currencies: ${currencies}</p>
               <p>Languages: ${languages}</p>
             </div>
             <div class="border-countries">
               <p>Border Countries: </p>
-              <button>France</button>
-              <button>Germany</button>
-              <button>Netherlands</button>
+              ${borders}
             </div>
           </div>
         </div>
@@ -144,6 +185,7 @@ function countryExtraInfo() {
 }
 getCountryData();
 function backgroundMode() {
+  // TOGGLING BETWEEN LIGHT AND DARK MODE
   const backgroundMode = document.querySelector(".background-mode");
   const bodyEl = document.querySelector("body");
   backgroundMode.addEventListener("click", () => {
