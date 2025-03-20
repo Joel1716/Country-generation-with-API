@@ -20,19 +20,30 @@ html {
 body {
   background-color: var(--dark-background);
   font-family: "Nunito Sans", sans-serif;
+  display: flex;
+  flex-direction: column;
 }
 main {
-  padding: 0 6rem;
+  width: 90%;
+  max-width: 140rem;
+  justify-self: center;
+}
+main {
   margin-top: 4rem;
 }
 header {
   background-color: var(--dark-elements-background);
-  padding: 2.5rem 6rem;
+  padding: 2.5rem 0;
+  display: flex;
+  justify-content: center;
+}
+.header-content {
+  width: 90%;
 }
 header svg {
   fill: white;
 }
-header,
+.header-content,
 .country-search-container {
   display: flex;
   align-items: center;
@@ -50,15 +61,19 @@ header,
 .country-search-container .input-container {
   position: relative;
   color: white;
+  width: 50%;
+  max-width: 40rem;
 }
 .country-search-container input {
-  padding: 1.5rem 10rem 1.5rem 6rem;
+  padding: 1.5rem 0 1.5rem 5rem;
   background-color: var(--dark-elements-background);
   width: 100%;
   height: 100%;
   border: none;
   outline: none;
   border-radius: 4px;
+  font-size: 1.4rem;
+  font-weight: 500;
 }
 
 .country-search-container .search-icon {
@@ -74,6 +89,8 @@ header,
   background-color: var(--dark-elements-background);
   border-radius: 4px;
   outline: none;
+  font-size: 1.4rem;
+  font-weight: 500;
 }
 .country-search-container option {
   margin-top: 10rem;
@@ -91,25 +108,31 @@ header,
 .each-country {
   background-color: var(--dark-elements-background);
   max-width: 18rem;
+  justify-self: center;
 }
 
 .each-country img {
-  width: 100%;
+  /* width: 100%; */
+  width: 18rem;
   height: 12rem;
   object-fit: cover;
 }
 .each-country .country-data {
-  padding: 1rem 1.5rem;
+  padding: 1rem 1.2rem;
   margin-bottom: 1.5rem;
 }
 .each-country .country-data h2 {
   margin-bottom: 1.5rem;
+  font-size: 1.5rem;
 }
 .each-country .country-data p {
   margin-bottom: 0.5rem;
+  font-size: 1.2rem;
 }
 .data {
+  font-size: 1.2rem;
   color: hsl(0, 0%, 52%);
+  margin-left: 0.2rem;
 }
 
 /* DISPLAY COUNTRY DATA */
@@ -125,16 +148,19 @@ header,
 }
 .eachCountryDataContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 1rem;
   margin-top: 2rem;
 }
 .eachCountryData {
-  padding: 3rem 1rem;
+  padding: 3rem 0;
 }
 .eachCountryDataContainer img {
-  width: 59.5rem;
-  height: 35.7rem;
+  width: 100%;
+  max-width: 50rem;
+  height: 100%;
+  max-height: 30rem;
+  align-self: center;
   object-fit: contain;
 }
 .eachCountryData h2 {
@@ -143,25 +169,28 @@ header,
 }
 .allData {
   display: grid;
-  grid-template-columns: 0.7fr 1fr;
-  gap: 2rem 0.1rem;
+  grid-template-columns: auto auto;
+  width: 100%;
+  gap: 2rem 1.5rem;
   font-size: 1.3rem;
   margin-top: 2rem;
 }
-.allData p {
+.border-countries-container {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-.border-countries {
   align-self: end;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
   margin-top: 5rem;
 }
-.border-countries p {
+.border-countries {
+  display: flex;
+  align-items: center;
+  margin-left: 0.8rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.border-countries-container p {
   font-size: 1.3rem;
+  flex-shrink: 0;
 }
 .border-countries button {
   border: none;
@@ -169,6 +198,7 @@ header,
   padding: 0.6rem 1.5rem;
   border-radius: 4px;
   font-size: 1.3rem;
+  flex: 1 1 auto;
 }
 
 /* BACKGROUND-MODE */

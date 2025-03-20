@@ -71,16 +71,19 @@ function filterBySearch(countryData) {
     countryExtraInfo();
   });
 }
+let capital = "";
 function generateCountryHTML(filteredData) {
   const allCountries = document.querySelector(".all-countries");
+  // Handle capital (can be an array or undefined)
   const countries = filteredData.map((country) => {
+    capital = country.capital ? Object.values(country.capital)[0] : "N/A";
     return ` <div class="each-country" data-name= "${country.name.common}">
         <img src="${country.flags.svg}" alt="" />
        <div class="country-data">
           <h2 class="country-name">${country.name.common}</h2>
           <p>Population: <span class="data">${country.population}</span></p>
           <p>Region: <span class="data">${country.region}</span></p>
-          <p>Capital: <span class="data">${country.capital}</span></p>
+          <p>Capital: <span class="data">${capital}</span></p>
        </div>
        </div>`;
   });
@@ -99,10 +102,10 @@ function countryExtraInfo() {
       const filterRequiredCountry = countryData.filter(
         (country) => country.name.common === countryName
       );
+      console.log(filterRequiredCountry);
       let currencies = "";
       let languages = "";
       let tld = "";
-      let capital = "";
       let nativeName = "N/A";
       let subregion = "";
       let borders = "";
@@ -114,11 +117,8 @@ function countryExtraInfo() {
             borders += `<button>${border}</button>`;
           });
         } else {
-          return "";
+          borders = "";
         }
-
-        // Handle capital (can be an array or undefined)
-        capital = country.capital ? country.capital.join(", ") : "N/A";
 
         // Handle top-level domain (can be an array or undefined)
         tld = country.tld ? country.tld.join(", ") : "N/A";
@@ -134,7 +134,6 @@ function countryExtraInfo() {
               .map(([_code, currency]) => `${currency.name}`)
               .join(", ")
           : "N/A";
-
         // Handle nativeName (nested in name.nativeName with language-specific keys)
         if (country.name.nativeName) {
           // Get the first available native name
@@ -163,13 +162,13 @@ function countryExtraInfo() {
               <p>Region: <span class="data">${filterRequiredCountry[0].region}</span></p>
               <p>Sub Region: <span class="data">${subregion}</span></p>
               <p>Capital: <span class="data">${capital}</span></p>
-              <p>Top Level Domain: ${tld}</p>
-              <p>Currencies: ${currencies}</p>
-              <p>Languages: ${languages}</p>
+              <p>Top Level Domain: <span class="data">${tld}</span></p>
+              <p>Currencies: <span class="data">${currencies}</span></p>
+              <p>Languages: <span class="data">${languages}</span></p>
             </div>
-            <div class="border-countries">
+            <div class="border-countries-container">
               <p>Border Countries: </p>
-              ${borders}
+              <div class="border-countries">${borders}</div>
             </div>
           </div>
         </div>

@@ -1,0 +1,44 @@
+@media (max-width: 57em) {
+  html {
+    font-size: 56.25%;
+  }
+  .eachCountryDataContainer {
+    grid-template-columns: 1fr 1.1fr;
+  }
+}
+@media (max-width: 47em) {
+  .eachCountryDataContainer,
+  .allData {
+    grid-template-columns: 1fr;
+  }
+  .eachCountryDataContainer img {
+    justify-self: center;
+  }
+}
+@media (max-width: 30em) {
+  html {
+    font-size: 50%;
+  }
+  .header-content h2,
+  .header-content .background-mode {
+    font-size: 1.8rem;
+  }
+  .country-search-container {
+    flex-direction: column;
+    align-items: start;
+    gap: 1rem;
+  }
+  .country-search-container .input-container {
+    width: 80%;
+  }
+}
+@media (max-width: 20em) {
+  html {
+    font-size: 43.75%;
+  }
+  .header-content h2,
+  .header-content .background-mode {
+    font-size: 1.6rem;
+    gap: 0.4rem;
+  }
+}
